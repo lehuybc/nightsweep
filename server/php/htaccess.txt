@@ -15,7 +15,7 @@ RewriteRule ^ https://www.nightsweep.xyz%{REQUEST_URI} [L,R=301]
   Header always set Strict-Transport-Security "max-age=31536000"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
   Header always set Cross-Origin-Resource-Policy "same-origin"
-  Header always set Content-Security-Policy "default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-E1Mh+llkhKb+W6xoDjeVJqccUYs3MGuXhbzpaJpm+vU=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+  Header always set Content-Security-Policy "default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-bs7cVm17MJ4Jk0wQ2544SRqc03+G3K3iYikqjvBhObs=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
   # Trang thống kê cần gửi form đăng nhập (form-action 'self'), không dùng script
   <Files "dashboard.php">
     Header always set Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"

@@ -726,7 +726,7 @@ function rerenderAll(){
   try{ if(typeof groups!=='undefined' && groups && groups.length) renderGroups(); }catch(e){}
 }
 $('lang').value=LANG;
-$('lang').onchange=()=>{ LANG=$('lang').value; track('lang_'+LANG); try{localStorage.setItem('night-sweep-lang',LANG);}catch(e){} rerenderAll(); renderDonate(); };
+$('lang').onchange=()=>{ LANG=$('lang').value; track('lang_'+LANG); try{localStorage.setItem('night-sweep-lang',LANG);}catch(e){} rerenderAll(); renderFooter(); };
 /* Google Analytics (tùy chọn): chỉ chạy khi config.js có ga:'G-XXXXXXX' và trình duyệt không bật DNT/GPC. Không gửi địa chỉ/ví, chỉ lượt xem và tên sự kiện trong TRACK_OK. */
 (function(){ try{
   const id=CFG.ga; if(!id || !/^G-[A-Z0-9]{4,14}$/.test(id)) return;
@@ -754,30 +754,64 @@ $('lang').onchange=()=>{ LANG=$('lang').value; track('lang_'+LANG); try{localSto
   b.appendChild(a); b.appendChild(m); b.appendChild(l); o.appendChild(b); document.body.appendChild(o);
 }catch(e){} })();
 /* Ủng hộ (donate): địa chỉ nhận do chủ trang cung cấp; chỉ hiển thị + nút sao chép, không có thao tác chuyển tiền tự động. */
+/* Liên kết chính thức: xây dựng lòng tin (mã nguồn mở + kênh chính thức). Chỉ là các link <a>, không gửi dữ liệu. */
+const OFFICIAL={github:'https://github.com/nuademon/nightsweep', x:'https://x.com/nuadem_onchain'};
+/* Chân trang hợp nhất: khối tin cậy (trên) + ủng hộ (dưới) trong một bố cục cân đối. */
+const SVG_GH='<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="vertical-align:-2px"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>';
+const SVG_X='<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="vertical-align:-1px"><path d="M9.52 6.77 15.48 0h-1.41L8.9 5.88 4.76 0H0l6.25 8.9L0 16h1.41l5.47-6.2L11.24 16H16L9.52 6.77Zm-1.94 2.2-.63-.89L1.92 1.04h2.17l4.07 5.7.63.89 5.29 7.41h-2.17L7.58 8.97Z"/></svg>';
+function renderFooter(){ renderTrust(); renderDonate(); }
+function renderTrust(){
+  try{
+    let box=document.getElementById('trust');
+    if(!box){ box=document.createElement('div'); box.id='trust'; const d=document.getElementById('donate'); d?d.parentNode.insertBefore(box,d):document.body.appendChild(box); }
+    box.style.cssText='max-width:600px;margin:52px auto 0;padding:30px 20px 0;border-top:1px solid #1c1d30;text-align:center';
+    const T={
+      vi:['Minh bạch &amp; đáng tin','Mã nguồn mở, ai cũng kiểm chứng được. Luôn kiểm tra đúng tên miền <b style="color:#c7c7df">nightsweep.xyz</b> — trang không bao giờ hỏi seed hay khóa riêng.','Mã nguồn','Kênh chính thức'],
+      ja:['透明性と信頼','オープンソースで誰でも検証可能。ドメインが <b style="color:#c7c7df">nightsweep.xyz</b> であることを必ず確認してください。シードや秘密鍵を尋ねることはありません。','ソースコード','公式チャンネル'],
+      en:['Open &amp; verifiable','Open source — anyone can verify it. Always check the domain is <b style="color:#c7c7df">nightsweep.xyz</b>; the site never asks for your seed or private key.','Source code','Official channel']
+    };
+    const t=T[LANG]||T.en;
+    box.innerHTML='';
+    const badge=document.createElement('div'); badge.innerHTML='✔ '+t[0];
+    badge.style.cssText='display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;color:#5ed6a0;background:#0f2c22;border:1px solid #1d4535;border-radius:999px;padding:4px 14px;margin-bottom:14px';
+    const d=document.createElement('p'); d.innerHTML=t[1]; d.style.cssText='font-size:12.5px;color:#9a9ab5;line-height:1.6;margin:0 auto 16px;max-width:460px';
+    const row=document.createElement('div'); row.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+    [[SVG_GH+' '+t[2],OFFICIAL.github],[SVG_X+' '+t[3],OFFICIAL.x]].forEach(([lab,href])=>{
+      const a=document.createElement('a'); a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.innerHTML=lab;
+      a.style.cssText='display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;padding:9px 18px;border-radius:999px;border:1px solid #2c2e4a;background:#14162a;color:#e8e8f2;text-decoration:none';
+      a.onmouseenter=()=>{a.style.borderColor='#3c3e64';a.style.background='#1a1c33';};
+      a.onmouseleave=()=>{a.style.borderColor='#2c2e4a';a.style.background='#14162a';};
+      row.appendChild(a);
+    });
+    box.appendChild(badge); box.appendChild(d); box.appendChild(row);
+  }catch(e){}
+}
 const DONATE=[['Cardano','addr1q9mxau2lunxn69305gd4mkqngr57p8uc8l80famu7dt2dlvmcwav9ae7tvzgtl7rsfjvgzvcjztm5qzx6mt7z8hr84rsdnpgd2'],['Midnight','mn_addr13ztwn676d2n5d36yvuvq4jvv2awtq7xc380h8nvguk7jvjcvg7sqruhxqh']];
 function renderDonate(){
   try{
     let box=document.getElementById('donate');
     if(!box){ box=document.createElement('div'); box.id='donate'; document.body.appendChild(box); }
-    box.style.cssText='max-width:560px;margin:36px auto 44px;padding:18px 16px 0;border-top:1px solid #1c1d30;text-align:center';
-    const T={vi:['Ủng hộ tác giả · không bắt buộc','Sao chép','Đã chép'],ja:['開発者を支援 · 任意','コピー','コピー済み'],en:['Support the author · optional','Copy','Copied']};
+    box.style.cssText='max-width:600px;margin:0 auto 52px;padding:22px 20px 0;text-align:center';
+    const T={vi:['Ủng hộ tác giả','không bắt buộc','Sao chép','Đã chép'],ja:['開発者を支援','任意','コピー','コピー済み'],en:['Support the author','optional','Copy','Copied']};
     const t=T[LANG]||T.en;
     box.textContent='';
-    const h=document.createElement('div'); h.textContent=t[0]; h.style.cssText='font-size:11px;letter-spacing:.06em;color:#7c7c96;margin-bottom:12px'; box.appendChild(h);
-    const grid=document.createElement('div'); grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px';
+    const h=document.createElement('div'); h.innerHTML='♥ '+t[0]+' <span style="color:#5c5c74">· '+t[1]+'</span>'; h.style.cssText='font-size:11px;letter-spacing:.06em;color:#7c7c96;margin-bottom:12px'; box.appendChild(h);
+    const grid=document.createElement('div'); grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px';
     DONATE.forEach(([net,addr])=>{
-      const cell=document.createElement('div'); cell.style.cssText='display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 10px;border:1px solid #1c1d30;border-radius:10px;background:#0e0f1a';
-      const n=document.createElement('div'); n.textContent=net; n.style.cssText='font-size:11px;color:#8a8aa5';
-      const c=document.createElement('code'); c.textContent=addr.slice(0,10)+'…'+addr.slice(-8); c.title=addr; c.style.cssText='font-size:11px;color:#a9a9bf';
-      const b=document.createElement('button'); b.type='button'; b.textContent=t[1]; b.title=addr;
-      b.style.cssText='font-size:11px;padding:2px 12px;border-radius:6px;border:1px solid #26273d;background:transparent;color:#8a8aa5;cursor:pointer';
-      b.onclick=()=>{ try{ navigator.clipboard.writeText(addr).then(()=>{ b.textContent=t[2]; b.style.color='#7fbf9f'; setTimeout(()=>{b.textContent=t[1]; b.style.color='#8a8aa5';},1500); }); }catch(e){} };
-      cell.appendChild(n); cell.appendChild(c); cell.appendChild(b); grid.appendChild(cell);
+      const cell=document.createElement('div'); cell.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid #1c1d30;border-radius:10px;background:#0e0f1a;text-align:left';
+      const left=document.createElement('div'); left.style.cssText='flex:1;min-width:0';
+      const n=document.createElement('div'); n.textContent=net; n.style.cssText='font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:#6e6e8a;margin-bottom:2px';
+      const c=document.createElement('code'); c.textContent=addr.slice(0,10)+'…'+addr.slice(-8); c.title=addr; c.style.cssText='font-size:11.5px;color:#a9a9bf';
+      left.appendChild(n); left.appendChild(c);
+      const b=document.createElement('button'); b.type='button'; b.textContent=t[2]; b.title=addr;
+      b.style.cssText='flex:none;font-size:11px;padding:5px 13px;border-radius:999px;border:1px solid #26273d;background:#14162a;color:#9a9ab5;cursor:pointer';
+      b.onclick=()=>{ try{ navigator.clipboard.writeText(addr).then(()=>{ b.textContent=t[3]; b.style.color='#7fbf9f'; b.style.borderColor='#1d4535'; setTimeout(()=>{b.textContent=t[2]; b.style.color='#9a9ab5'; b.style.borderColor='#26273d';},1500); }); }catch(e){} };
+      cell.appendChild(left); cell.appendChild(b); grid.appendChild(cell);
     });
     box.appendChild(grid);
   }catch(e){}
 }
-renderDonate();
+renderFooter();
 track('view'); loadWallets(); applyStatic(); renderWallets(); renderThaw(); renderFind(); fillWalletSel();
 window.__nightApp = {get wallets(){return wallets;}, addWallets, get groups(){return groups;}, finder:()=>finder};
 })();
