@@ -1,0 +1,8 @@
+# Đừng bao giờ đưa file cấu hình thật hay bí mật lên GitHub
+config.js
+*.local
+.env
+.env.*
+server/php/night-data/
+# File cấu hình thật (giữ bản mẫu config.example.js)
+public/config.js
