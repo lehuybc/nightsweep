@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-VT0P3TDckJWFchwkNC0olUSlSJJZPgqGkUTZ662zHkk=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-eweVVodN7bSGIcOJFAo+KO/yuumtshnptjQW4dvKT+k=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NIGHT Sweep – Check &amp; Sweep Midnight NIGHT Across Cardano Wallets</title>
 <meta name="description" content="Check thaw schedules and sweep Midnight NIGHT (Glacier Drop / Scavenger Mine) from many Cardano addresses into one. Signing happens in your Typhon wallet — no seed phrase or private key is ever entered.">
@@ -1157,7 +1157,7 @@ $('lang').onchange=()=>{ LANG=$('lang').value; track('lang_'+LANG); try{localSto
 }catch(e){} })();
 /* Ủng hộ (donate): địa chỉ nhận do chủ trang cung cấp; chỉ hiển thị + nút sao chép, không có thao tác chuyển tiền tự động. */
 /* Liên kết chính thức: xây dựng lòng tin (mã nguồn mở + kênh chính thức). Chỉ là các link <a>, không gửi dữ liệu. */
-const OFFICIAL={github:'https://github.com/nuademon/nightsweep', x:'https://x.com/nuadem_onchain'};
+const OFFICIAL={github:'https://github.com/nuademon/nightsweep', x:'https://x.com/nightsweep_xyz'};
 /* Chân trang hợp nhất: khối tin cậy (trên) + ủng hộ (dưới) trong một bố cục cân đối. */
 const SVG_GH='<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="vertical-align:-2px"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>';
 const SVG_X='<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="vertical-align:-1px"><path d="M9.52 6.77 15.48 0h-1.41L8.9 5.88 4.76 0H0l6.25 8.9L0 16h1.41l5.47-6.2L11.24 16H16L9.52 6.77Zm-1.94 2.2-.63-.89L1.92 1.04h2.17l4.07 5.7.63.89 5.29 7.41h-2.17L7.58 8.97Z"/></svg>';
