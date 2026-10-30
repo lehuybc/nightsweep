@@ -9,7 +9,11 @@ const NS_EVENTS = ['view','tab_1','tab_2','tab_3','tab_4','tab_5','thaw_run','fi
 const NS_GUARD = "<?php http_response_code(403); exit; ?>\n";
 
 function ns_dir(): string {
-    if (NS_DATA_DIR_OVERRIDE !== '') return NS_DATA_DIR_OVERRIDE;
+    // Thư mục override mất quyền ghi thì dùng thư mục tự chọn, để proxy.php không trả 500 (lỗi "quá số lần thử").
+    if (NS_DATA_DIR_OVERRIDE !== '') {
+        if (!is_dir(NS_DATA_DIR_OVERRIDE)) { @mkdir(NS_DATA_DIR_OVERRIDE, 0700, true); }
+        if (is_dir(NS_DATA_DIR_OVERRIDE) && is_writable(NS_DATA_DIR_OVERRIDE)) return NS_DATA_DIR_OVERRIDE;
+    }
     $root = $_SERVER['DOCUMENT_ROOT'] ?? '';
     if ($root !== '') { $up = dirname($root); if (is_dir($up) && is_writable($up)) return $up . '/night-data'; }
     return __DIR__ . '/night-data';
