@@ -3,7 +3,7 @@
 1. Get the source and build: `python3 build.py` prints the SHA-256 of `public/index.html`.
 2. Download what the site serves and hash it:
    ```
-   curl -s https://www.nightsweep.xyz/ | sha256sum
+   curl -s https://nightsweep.xyz/ | sha256sum
    ```
 3. The two hashes should be identical. If they differ, do not use the site and tell the maintainer.
 

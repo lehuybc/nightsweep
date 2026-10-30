@@ -1,12 +1,16 @@
-# Bản dùng cho trang CÔNG KHAI https://www.nightsweep.xyz/ (không có mật khẩu).
+# Bản dùng cho trang CÔNG KHAI https://nightsweep.xyz/ (không có mật khẩu).
 # Đổi tên file này thành .htaccess và đặt cùng thư mục với index.html (gốc của tên miền).
+# Chỉ dùng cho Apache/LiteSpeed (cần AllowOverride All, mod_rewrite, mod_headers). nginx không đọc file này: dùng server/nginx/nightsweep.conf.
 Options -Indexes
 
-# Luôn dùng HTTPS và luôn dùng www (nightsweep.xyz tự chuyển sang https://www.nightsweep.xyz)
+# Luôn dùng HTTPS và tên miền không có www (www.nightsweep.xyz tự chuyển sang https://nightsweep.xyz, giống canonical)
 RewriteEngine On
-RewriteCond %{HTTPS} off [OR]
-RewriteCond %{HTTP_HOST} !^www\.nightsweep\.xyz$ [NC]
-RewriteRule ^ https://www.nightsweep.xyz%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} !^nightsweep\.xyz$ [NC]
+RewriteRule ^ https://nightsweep.xyz%{REQUEST_URI} [L,R=301]
+# Sau Cloudflare (SSL "Flexible") Apache luôn thấy HTTPS off: xét thêm X-Forwarded-Proto để không chuyển hướng vòng tròn
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://nightsweep.xyz%{REQUEST_URI} [L,R=301]
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
