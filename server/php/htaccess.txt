@@ -1,12 +1,16 @@
-# Bản dùng cho trang CÔNG KHAI https://www.nightsweep.xyz/ (không có mật khẩu).
+# Bản dùng cho trang CÔNG KHAI https://nightsweep.xyz/ (không có mật khẩu).
 # Đổi tên file này thành .htaccess và đặt cùng thư mục với index.html (gốc của tên miền).
+# Chỉ dùng cho Apache/LiteSpeed (cần AllowOverride All, mod_rewrite, mod_headers). nginx không đọc file này: dùng server/nginx/nightsweep.conf.
 Options -Indexes
 
-# Luôn dùng HTTPS và luôn dùng www (nightsweep.xyz tự chuyển sang https://www.nightsweep.xyz)
+# Luôn dùng HTTPS và tên miền không có www (www.nightsweep.xyz tự chuyển sang https://nightsweep.xyz, giống canonical)
 RewriteEngine On
-RewriteCond %{HTTPS} off [OR]
-RewriteCond %{HTTP_HOST} !^www\.nightsweep\.xyz$ [NC]
-RewriteRule ^ https://www.nightsweep.xyz%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} !^nightsweep\.xyz$ [NC]
+RewriteRule ^ https://nightsweep.xyz%{REQUEST_URI} [L,R=301]
+# Sau Cloudflare (SSL "Flexible") Apache luôn thấy HTTPS off: xét thêm X-Forwarded-Proto để không chuyển hướng vòng tròn
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://nightsweep.xyz%{REQUEST_URI} [L,R=301]
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
@@ -15,7 +19,7 @@ RewriteRule ^ https://www.nightsweep.xyz%{REQUEST_URI} [L,R=301]
   Header always set Strict-Transport-Security "max-age=31536000"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
   Header always set Cross-Origin-Resource-Policy "same-origin"
-  Header always set Content-Security-Policy "default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-bs7cVm17MJ4Jk0wQ2544SRqc03+G3K3iYikqjvBhObs=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+  Header always set Content-Security-Policy "default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-eweVVodN7bSGIcOJFAo+KO/yuumtshnptjQW4dvKT+k=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
   # Trang thống kê cần gửi form đăng nhập (form-action 'self'), không dùng script
   <Files "dashboard.php">
     Header always set Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
