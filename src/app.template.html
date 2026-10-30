@@ -262,7 +262,6 @@ function track(ev){
   try{
     if(!TRACK_OK.has(ev)) return;
     if(navigator.doNotTrack==='1' || navigator.globalPrivacyControl) return;
-    if(window.gtag) gtag('event',ev);
     if(!CFG.track) return;
     const body=JSON.stringify({e:ev});
     if(navigator.sendBeacon) navigator.sendBeacon(CFG.track,new Blob([body],{type:'application/json'}));
@@ -727,16 +726,6 @@ function rerenderAll(){
 }
 $('lang').value=LANG;
 $('lang').onchange=()=>{ LANG=$('lang').value; track('lang_'+LANG); try{localStorage.setItem('night-sweep-lang',LANG);}catch(e){} rerenderAll(); renderFooter(); };
-/* Google Analytics (tùy chọn): chỉ chạy khi config.js có ga:'G-XXXXXXX' và trình duyệt không bật DNT/GPC. Không gửi địa chỉ/ví, chỉ lượt xem và tên sự kiện trong TRACK_OK. */
-(function(){ try{
-  const id=CFG.ga; if(!id || !/^G-[A-Z0-9]{4,14}$/.test(id)) return;
-  if(navigator.doNotTrack==='1' || navigator.globalPrivacyControl) return;
-  window.dataLayer=window.dataLayer||[]; window.gtag=function(){ dataLayer.push(arguments); };
-  gtag('js',new Date());
-  gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
-  gtag('config',id,{allow_google_signals:false,allow_ad_personalization_signals:false,page_location:location.origin+location.pathname,page_referrer:''});
-  const sc=document.createElement('script'); sc.async=true; sc.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(id); document.head.appendChild(sc);
-}catch(e){} })();
 /* Chống trang giả mạo: chạy ngoài tên miền chính thức thì phủ cảnh báo và vô hiệu hóa toàn bộ trang. Tên miền khác thêm qua config.js: officialHosts:['...']. */
 (function(){ try{
   const h=location.hostname.toLowerCase();

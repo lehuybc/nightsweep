@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-eweVVodN7bSGIcOJFAo+KO/yuumtshnptjQW4dvKT+k=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-nA2ZHxOtTdUOcGBrEE60K86150w1F96lzjBFo6opLOM=' 'sha256-CHd2PRKCaGMI7+9hWRgP7zWln41HF264NdXlERn/YbE='; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NIGHT Sweep – Check &amp; Sweep Midnight NIGHT Across Cardano Wallets</title>
 <meta name="description" content="Check thaw schedules and sweep Midnight NIGHT (Glacier Drop / Scavenger Mine) from many Cardano addresses into one. Signing happens in your Typhon wallet — no seed phrase or private key is ever entered.">
@@ -637,7 +637,6 @@ function track(ev){
   try{
     if(!TRACK_OK.has(ev)) return;
     if(navigator.doNotTrack==='1' || navigator.globalPrivacyControl) return;
-    if(window.gtag) gtag('event',ev);
     if(!CFG.track) return;
     const body=JSON.stringify({e:ev});
     if(navigator.sendBeacon) navigator.sendBeacon(CFG.track,new Blob([body],{type:'application/json'}));
@@ -1129,16 +1128,6 @@ function rerenderAll(){
 }
 $('lang').value=LANG;
 $('lang').onchange=()=>{ LANG=$('lang').value; track('lang_'+LANG); try{localStorage.setItem('night-sweep-lang',LANG);}catch(e){} rerenderAll(); renderFooter(); };
-/* Google Analytics (tùy chọn): chỉ chạy khi config.js có ga:'G-XXXXXXX' và trình duyệt không bật DNT/GPC. Không gửi địa chỉ/ví, chỉ lượt xem và tên sự kiện trong TRACK_OK. */
-(function(){ try{
-  const id=CFG.ga; if(!id || !/^G-[A-Z0-9]{4,14}$/.test(id)) return;
-  if(navigator.doNotTrack==='1' || navigator.globalPrivacyControl) return;
-  window.dataLayer=window.dataLayer||[]; window.gtag=function(){ dataLayer.push(arguments); };
-  gtag('js',new Date());
-  gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
-  gtag('config',id,{allow_google_signals:false,allow_ad_personalization_signals:false,page_location:location.origin+location.pathname,page_referrer:''});
-  const sc=document.createElement('script'); sc.async=true; sc.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(id); document.head.appendChild(sc);
-}catch(e){} })();
 /* Chống trang giả mạo: chạy ngoài tên miền chính thức thì phủ cảnh báo và vô hiệu hóa toàn bộ trang. Tên miền khác thêm qua config.js: officialHosts:['...']. */
 (function(){ try{
   const h=location.hostname.toLowerCase();
